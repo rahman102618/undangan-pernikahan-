@@ -1,0 +1,59 @@
+/* =====================================================================
+   animation.css — SEMUA ANIMASI
+   ===================================================================== */
+
+/* Animasi putar piringan hitam: satu putaran penuh */
+@keyframes rotateVinyl {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* Animasi muncul sambil naik sedikit (dipakai cover) */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Animasi memudar masuk sederhana (dipakai saat halaman utama tampil) */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Zoom pelan pada foto latar cover */
+@keyframes slowZoom {
+    from { transform: scale(1.12); }
+    to   { transform: scale(1); }
+}
+
+/* Piringan berputar hanya ketika tombol memiliki class is-playing (diatur JS sesuai status audio asli) */
+.vinyl { animation: rotateVinyl 3.5s linear infinite; animation-play-state: paused; }
+.vinyl-btn.is-playing .vinyl { animation-play-state: running; }
+
+/* Elemen cover masuk berurutan; variabel --d (delay) ditentukan di HTML */
+.cover__anim { opacity: 0; animation: fadeUp 1.2s var(--ease) forwards; animation-delay: var(--d, 0s); }
+.cover__bg { animation: slowZoom 8s var(--ease) forwards; }
+
+/* Halaman utama memudar saat dibuka */
+.invitation.is-visible { animation: fadeIn 1.2s var(--ease); }
+
+/* SCROLL REVEAL: awalnya transparan dan turun; JS menambah class is-visible ketika terlihat */
+.reveal { opacity: 0; transform: translateY(36px); transition: opacity 1s var(--ease), transform 1s var(--ease); transition-delay: var(--d, 0s); }
+.reveal.is-visible { opacity: 1; transform: none; }
+
+/* Timeline muncul bertahap: tiap item memakai delay dari JS */
+.timeline__item.reveal { transform: translateX(-24px); }
+.timeline__item.reveal.is-visible { transform: none; }
+
+/* Foto galeri muncul dengan zoom ringan */
+.gallery__item.reveal { transform: scale(.94); }
+.gallery__item.reveal.is-visible { transform: none; }
+
+/* Hormati pengguna yang meminta animasi dikurangi */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .cover__anim, .cover__bg, .invitation.is-visible { animation: none; opacity: 1; transform: none; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .vinyl { animation-duration: 12s; }
+    .cover.is-closing { transition: opacity .3s linear; transform: none; }
+}
